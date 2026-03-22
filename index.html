@@ -5,25 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SAXAR Coach Training</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 16px;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+        
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b20, #ff8e8e20);
+            border-radius: 24px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #ff6b6b;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: var(--tg-theme-hint-color, #666666);
+            font-size: 14px;
+        }
+        
+        /* Прогресс-бар */
+        .progress-section {
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar {
+            background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+            border-radius: 12px;
+            height: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #666666);
+        }
+        
+        /* Табы */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            padding: 4px;
+            border-radius: 12px;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--tg-theme-text-color, #000000);
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            background: var(--tg-theme-button-color, #ff6b6b);
+            color: var(--tg-theme-button-text-color, #ffffff);
+        }
+        
+        /* Контент */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Модули */
+        .modules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .module-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .module-card.completed {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .module-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-status {
+            font-size: 20px;
+        }
+        
+        .module-card p {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #666666);
+            margin-bottom: 8px;
+        }
+        
+        .module-content {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--tg-theme-hint-color, #ddd);
+        }
+        
+        .module-content.active {
+            display: block;
+        }
+        
+        .test-question {
+            background: var(--tg-theme-bg-color, #ffffff);
+            padding: 16px;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        
+        .test-question strong {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .test-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .test-option {
+            padding: 12px;
+            border: 2px solid var(--tg-theme-hint-color, #ddd);
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--tg-theme-text-color, #000000);
+        }
+        
+        .test-option:hover {
+            border-color: #ff6b6b;
+            background: #ff6b6b10;
+        }
+        
+        /* Правила, штрафы, премии */
+        .rules-card, .fines-card, .bonus-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        
+        .rules-card h3, .fines-card h3, .bonus-card h3 {
+            margin: 16px 0 12px 0;
+            font-size: 18px;
+        }
+        
+        .rules-card h3:first-child, .fines-card h3:first-child, .bonus-card h3:first-child {
+            margin-top: 0;
+        }
+        
+        .rules-card ul, .fines-card ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .rules-card li, .fines-card li {
+            margin: 8px 0;
+        }
+        
+        .fine-item, .bonus-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+        }
+        
+        .fine-item:last-child, .bonus-item:last-child {
+            border-bottom: none;
+        }
+        
+        .fine-name, .bonus-name {
+            font-weight: 500;
+        }
+        
+        .fine-amount, .bonus-amount {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        /* Кнопка фидбека */
+        .feedback-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: var(--tg-theme-button-color, #ff6b6b);
+            border: none;
+            color: var(--tg-theme-button-text-color, #ffffff);
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .feedback-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Адаптация под темную тему */
+        @media (prefers-color-scheme: dark) {
+            .module-card, .rules-card, .fines-card, .bonus-card {
+                background: var(--tg-theme-secondary-bg-color, #1a1a1a);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
-        <!-- Шапка -->
         <div class="header">
             <h1>🎓 SAXAR Coach</h1>
             <p>Обучение тренеров студии танцев</p>
         </div>
 
-        <!-- Прогресс -->
         <div class="progress-section">
             <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                <div class="progress-fill" id="progressFill"></div>
             </div>
             <div class="progress-text" id="progressText">Прогресс: 0%</div>
         </div>
 
-        <!-- Навигация -->
         <div class="nav-tabs">
             <button class="tab-btn active" data-tab="modules">📚 Модули</button>
             <button class="tab-btn" data-tab="rules">📋 Правила</button>
@@ -31,14 +299,11 @@
             <button class="tab-btn" data-tab="bonus">🎁 Премии</button>
         </div>
 
-        <!-- Контент -->
         <div class="content">
-            <!-- Модули -->
             <div id="modulesTab" class="tab-content active">
                 <div class="modules-grid" id="modulesGrid"></div>
             </div>
 
-            <!-- Правила -->
             <div id="rulesTab" class="tab-content">
                 <div class="rules-card">
                     <h3>✅ Стандарты работы</h3>
@@ -60,7 +325,6 @@
                 </div>
             </div>
 
-            <!-- Штрафы -->
             <div id="finesTab" class="tab-content">
                 <div class="fines-card">
                     <h3>💰 Штрафы</h3>
@@ -77,7 +341,7 @@
                         <span class="fine-amount">1000 ₽</span>
                     </div>
                     <div class="fine-item">
-                        <span class="fine-name">Отмена занятия (< 4ч)</span>
+                        <span class="fine-name">Отмена занятия (&lt; 4ч)</span>
                         <span class="fine-amount">2000 ₽</span>
                     </div>
                     
@@ -91,7 +355,6 @@
                 </div>
             </div>
 
-            <!-- Премии -->
             <div id="bonusTab" class="tab-content">
                 <div class="bonus-card">
                     <h3>🎁 Премии</h3>
@@ -115,10 +378,240 @@
             </div>
         </div>
 
-        <!-- Кнопка фидбека -->
-        <button class="feedback-btn" id="feedbackBtn">❓ Задать вопрос</button>
+        <button class="feedback-btn" id="feedbackBtn">❓</button>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // Инициализация Telegram Web App
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.MainButton.hide();
+        tg.BackButton.hide();
+
+        // Данные (хранятся в CloudStorage Telegram)
+        let userData = {
+            completedModules: []
+        };
+
+        // Модули обучения
+        const modules = {
+            1: {
+                title: "Общие положения",
+                content: "• Тренер подчиняется Руководителю, Старшему тренеру и Администратору\n• Приходить на работу нужно за 15 минут до занятия\n• При замене приоритет - групповые занятия\n• Отпуск согласовывается заранее, замену находишь сам",
+                question: "За сколько минут нужно приходить на работу?",
+                options: ["5 минут", "10 минут", "15 минут"],
+                correct: 2
+            },
+            2: {
+                title: "Внешний вид и поведение",
+                content: "• Опрятный внешний вид\n• Спортивная или корпоративная форма\n• Нельзя сидеть в тренерской - нужно быть у ресепшн\n• Запрещено курение и алкоголь",
+                question: "Где должен находиться тренер до начала занятия?",
+                options: ["В тренерской", "У ресепшн, встречать учеников", "В танцевальном зале"],
+                correct: 1
+            },
+            3: {
+                title: "Стандарты сервиса",
+                content: "• Встречать учеников у ресепшн\n• После пробного занятия - обязательно дать обратную связь родителю\n• Общаться с родителями очно до/после занятий\n• Не переходить в неформальное общение вне студии",
+                question: "Что нужно сделать после пробного занятия?",
+                options: ["Ничего, пусть администратор", "Поговорить с родителем и дать обратную связь", "Отправить сообщение в WhatsApp"],
+                correct: 1
+            },
+            4: {
+                title: "Запрещенные действия",
+                content: "❌ ЗАПРЕЩЕНО:\n• Опаздывать на занятия\n• Сидеть в тренерской до последнего\n• Оставлять детей без присмотра\n• Допускать третьих лиц без согласования\n• Самостоятельно регистрировать на соревнования\n• Неформальное общение с родителями",
+                question: "Что из перечисленного ЗАПРЕЩЕНО тренеру?",
+                options: ["Общаться с родителями после занятия", "Сидеть в тренерской до последнего момента", "Проветривать зал перед занятием"],
+                correct: 1
+            },
+            5: {
+                title: "Штрафы",
+                content: "💰 ШТРАФЫ:\n• Опоздание: 500₽ за каждые 15 мин\n• Опоздание на группу: ×2 от ставки\n• Игнорирование поручений: 1000₽ (повторно 2000₽)\n• Отмена занятия за <4 часов: 2000₽",
+                question: "Какой штраф за игнорирование поручения администратора?",
+                options: ["500₽", "1000₽", "Увольнение"],
+                correct: 1
+            },
+            6: {
+                title: "Премии",
+                content: "🎁 ПРЕМИИ:\n• 1000₽ - соблюдение всех пунктов инструкции за месяц\n• 1000₽ - помощь на мероприятиях\n• Бонус за количество клиентов (от 5 и от 10 человек)",
+                question: "Какая премия выплачивается за соблюдение всех пунктов инструкции?",
+                options: ["500₽", "1000₽", "2000₽"],
+                correct: 1
+            },
+            7: {
+                title: "KPI тренера",
+                content: "📊 Основные показатели:\n• Посещаемость групп\n• Удержание учеников\n• Рост численности группы\n• Участие в мероприятиях\n• Качество подготовки учеников",
+                question: "Что входит в KPI тренера?",
+                options: ["Только посещаемость", "Посещаемость, удержание, рост численности", "Только участие в мероприятиях"],
+                correct: 1
+            },
+            8: {
+                title: "Безопасность",
+                content: "🛡️ ПРАВИЛА БЕЗОПАСНОСТИ:\n• Не запускать детей в зал одних\n• Не трогать зеркала и стены\n• Проветривание и контроль температуры\n• После занятия выключить аппаратуру, убрать инвентарь",
+                question: "Какое правило безопасности является обязательным?",
+                options: ["Можно оставить детей на 5 минут", "Нельзя запускать детей в зал одних", "Дети могут сами включать музыку"],
+                correct: 1
+            }
+        };
+
+        // Загрузка данных из Telegram CloudStorage
+        async function loadData() {
+            try {
+                const completed = await tg.CloudStorage.getItem('completedModules');
+                if (completed) {
+                    userData.completedModules = JSON.parse(completed);
+                }
+            } catch(e) {
+                console.log('CloudStorage not available, using memory');
+            }
+            updateProgress();
+        }
+
+        // Сохранение данных в Telegram CloudStorage
+        async function saveData() {
+            try {
+                await tg.CloudStorage.setItem('completedModules', JSON.stringify(userData.completedModules));
+            } catch(e) {
+                console.log('CloudStorage save failed');
+            }
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            const total = Object.keys(modules).length;
+            const completed = userData.completedModules.length;
+            const percent = Math.round((completed / total) * 100);
+            
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('progressText').innerHTML = `Прогресс: ${completed}/${total} модулей (${percent}%)`;
+        }
+
+        // Отображение модулей
+        function renderModules() {
+            const grid = document.getElementById('modulesGrid');
+            grid.innerHTML = '';
+            
+            for (let [id, module] of Object.entries(modules)) {
+                const isCompleted = userData.completedModules.includes(parseInt(id));
+                const card = document.createElement('div');
+                card.className = `module-card ${isCompleted ? 'completed' : ''}`;
+                card.innerHTML = `
+                    <h3>
+                        Модуль ${id}: ${module.title}
+                        <span class="module-status">${isCompleted ? '✅' : '📚'}</span>
+                    </h3>
+                    <p>${module.content.substring(0, 80)}...</p>
+                    <div class="module-content" id="module-${id}-content">
+                        <div class="test-question">
+                            <strong>❓ ${module.question}</strong>
+                            <div class="test-options">
+                                ${module.options.map((opt, idx) => `
+                                    <button class="test-option" data-module="${id}" data-option="${idx}">
+                                        ${String.fromCharCode(65 + idx)}. ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('test-option')) {
+                        const content = card.querySelector('.module-content');
+                        content.classList.toggle('active');
+                    }
+                });
+                
+                card.querySelectorAll('.test-option').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const moduleId = parseInt(btn.dataset.module);
+                        const option = parseInt(btn.dataset.option);
+                        checkAnswer(moduleId, option);
+                    });
+                });
+                
+                grid.appendChild(card);
+            }
+        }
+
+        // Проверка ответа
+        async function checkAnswer(moduleId, option) {
+            const isCorrect = (option === modules[moduleId].correct);
+            
+            if (isCorrect) {
+                if (!userData.completedModules.includes(moduleId)) {
+                    userData.completedModules.push(moduleId);
+                    await saveData();
+                    updateProgress();
+                    
+                    tg.showPopup({
+                        title: "✅ Правильно!",
+                        message: `Модуль ${moduleId} пройден!`,
+                        buttons: [{type: "ok"}]
+                    });
+                    
+                    renderModules();
+                }
+            } else {
+                tg.showPopup({
+                    title: "❌ Неправильно",
+                    message: `Правильный ответ: ${String.fromCharCode(65 + modules[moduleId].correct)}. ${modules[moduleId].options[modules[moduleId].correct]}\n\nПовтори материал и попробуй снова.`,
+                    buttons: [{type: "ok"}]
+                });
+            }
+        }
+
+        // Переключение табов
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    contents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}Tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Обратная связь
+        function setupFeedback() {
+            const btn = document.getElementById('feedbackBtn');
+            btn.addEventListener('click', () => {
+                tg.showPopup({
+                    title: "❓ Задать вопрос",
+                    message: "Напишите свой вопрос. Администратор свяжется с вами.",
+                    buttons: [
+                        {type: "default", text: "Написать вопрос"},
+                        {type: "cancel"}
+                    ]
+                }, (buttonId) => {
+                    if (buttonId === 0) {
+                        tg.sendData(JSON.stringify({
+                            type: 'question',
+                            text: 'Тренер задает вопрос через Mini App'
+                        }));
+                        tg.showAlert("Ваш вопрос отправлен! Администратор ответит в ближайшее время.");
+                    }
+                });
+            });
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadData();
+            renderModules();
+            setupTabs();
+            setupFeedback();
+            
+            // Настраиваем цвета под тему Telegram
+            document.body.style.backgroundColor = tg.themeParams.bg_color;
+        });
+    </script>
 </body>
 </html>
