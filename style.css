@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    padding: 16px;
+}
+
+.app-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Шапка */
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: #ff6b6b;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: var(--tg-theme-hint-color, #666666);
+    font-size: 14px;
+}
+
+/* Прогресс-бар */
+.progress-section {
+    margin-bottom: 24px;
+}
+
+.progress-bar {
+    background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+    border-radius: 12px;
+    height: 12px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 12px;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--tg-theme-hint-color, #666666);
+}
+
+/* Табы */
+.nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--tg-theme-text-color, #000000);
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: var(--tg-theme-button-color, #ff6b6b);
+    color: var(--tg-theme-button-text-color, #ffffff);
+}
+
+/* Контент */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Модули */
+.modules-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.module-card {
+    background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.module-card.completed {
+    border-left: 4px solid #4caf50;
+}
+
+.module-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.module-status {
+    font-size: 20px;
+}
+
+.module-card p {
+    font-size: 14px;
+    color: var(--tg-theme-hint-color, #666666);
+    margin-bottom: 12px;
+}
+
+.module-content {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--tg-theme-hint-color, #ddd);
+}
+
+.module-content.active {
+    display: block;
+}
+
+.test-question {
+    background: var(--tg-theme-bg-color, #ffffff);
+    padding: 16px;
+    border-radius: 12px;
+    margin: 12px 0;
+}
+
+.test-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.test-option {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--tg-theme-hint-color, #ddd);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.test-option:hover {
+    border-color: #ff6b6b;
+}
+
+/* Правила, штрафы, премии */
+.rules-card, .fines-card, .bonus-card {
+    background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.rules-card h3, .fines-card h3, .bonus-card h3 {
+    margin: 16px 0 12px 0;
+    font-size: 18px;
+}
+
+.rules-card ul, .fines-card ul {
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.rules-card li, .fines-card li {
+    margin: 8px 0;
+}
+
+.fine-item, .bonus-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--tg-theme-hint-color, #eee);
+}
+
+.fine-item:last-child, .bonus-item:last-child {
+    border-bottom: none;
+}
+
+.fine-name, .bonus-name {
+    font-weight: 500;
+}
+
+.fine-amount, .bonus-amount {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Кнопка фидбека */
+.feedback-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: var(--tg-theme-button-color, #ff6b6b);
+    border: none;
+    color: var(--tg-theme-button-text-color, #ffffff);
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+}
+
+.feedback-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--tg-theme-bg-color, #ffffff);
+    border-radius: 20px;
+    padding: 24px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content h3 {
+    margin-bottom: 16px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--tg-theme-hint-color, #ddd);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+    color: var(--tg-theme-text-color, #000000);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+    background: #ff6b6b;
+    color: white;
+}
+
+.modal-buttons button:last-child {
+    background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+}
