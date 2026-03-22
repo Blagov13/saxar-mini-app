@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>SAXAR Coach Training</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка -->
+        <div class="header">
+            <h1>🎓 SAXAR Coach</h1>
+            <p>Обучение тренеров студии танцев</p>
+        </div>
+
+        <!-- Прогресс -->
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">Прогресс: 0%</div>
+        </div>
+
+        <!-- Навигация -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="modules">📚 Модули</button>
+            <button class="tab-btn" data-tab="rules">📋 Правила</button>
+            <button class="tab-btn" data-tab="fines">💰 Штрафы</button>
+            <button class="tab-btn" data-tab="bonus">🎁 Премии</button>
+        </div>
+
+        <!-- Контент -->
+        <div class="content">
+            <!-- Модули -->
+            <div id="modulesTab" class="tab-content active">
+                <div class="modules-grid" id="modulesGrid"></div>
+            </div>
+
+            <!-- Правила -->
+            <div id="rulesTab" class="tab-content">
+                <div class="rules-card">
+                    <h3>✅ Стандарты работы</h3>
+                    <ul>
+                        <li>Приходить за <strong>15 минут</strong> до занятия</li>
+                        <li>Встречать учеников у <strong>ресепшн</strong></li>
+                        <li>Быть в <strong>спортивной/корпоративной</strong> форме</li>
+                        <li>Давать обратную связь родителям <strong>после пробного</strong> занятия</li>
+                    </ul>
+                    
+                    <h3>❌ Запрещено</h3>
+                    <ul>
+                        <li>Опаздывать на занятия</li>
+                        <li>Сидеть в тренерской до последнего</li>
+                        <li>Оставлять детей без присмотра</li>
+                        <li>Общаться с родителями вне студии</li>
+                        <li>Передавать личные контакты учеников</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Штрафы -->
+            <div id="finesTab" class="tab-content">
+                <div class="fines-card">
+                    <h3>💰 Штрафы</h3>
+                    <div class="fine-item">
+                        <span class="fine-name">Опоздание (каждые 15 мин)</span>
+                        <span class="fine-amount">500 ₽</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-name">Опоздание на групповое</span>
+                        <span class="fine-amount">×2 от ставки</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-name">Игнорирование поручений</span>
+                        <span class="fine-amount">1000 ₽</span>
+                    </div>
+                    <div class="fine-item">
+                        <span class="fine-name">Отмена занятия (< 4ч)</span>
+                        <span class="fine-amount">2000 ₽</span>
+                    </div>
+                    
+                    <h3>⚡ Увольнение</h3>
+                    <ul>
+                        <li>Грубость клиенту</li>
+                        <li>Алкоголь/наркотики</li>
+                        <li>Обсуждение бизнес-процессов</li>
+                        <li>Обмен контактами с учениками</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Премии -->
+            <div id="bonusTab" class="tab-content">
+                <div class="bonus-card">
+                    <h3>🎁 Премии</h3>
+                    <div class="bonus-item">
+                        <span class="bonus-name">Соблюдение инструкции (месяц)</span>
+                        <span class="bonus-amount">1000 ₽</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-name">Помощь на мероприятиях</span>
+                        <span class="bonus-amount">1000 ₽</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-name">Группа от 5 человек</span>
+                        <span class="bonus-amount">Бонус</span>
+                    </div>
+                    <div class="bonus-item">
+                        <span class="bonus-name">Группа от 10 человек</span>
+                        <span class="bonus-amount">Бонус +</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка фидбека -->
+        <button class="feedback-btn" id="feedbackBtn">❓ Задать вопрос</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
